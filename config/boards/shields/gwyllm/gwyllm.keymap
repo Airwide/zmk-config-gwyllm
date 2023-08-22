@@ -1,0 +1,317 @@
+#include <behaviors.dtsi>
+#include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/bt.h>
+#include <dt-bindings/zmk/outputs.h>
+
+// Layers
+#define COLEMAK    0
+#define MAC        1
+#define QWERTY     2
+#define SYMBOL     3
+#define SYMBOL_MAC 4
+#define NUMBER     5
+#define NAVI       6
+#define ADJUST     7
+
+// Swedish keycodes
+#define SE_SECT GRAVE       // §
+#define SE_PLUS MINUS       // +
+#define SE_ACUT EQUAL       // ´ (dead)
+#define SE_ARNG LBKT        // Å
+#define SE_DIAE RBKT        // ¨ (dead)
+#define SE_ODIA SEMI        // Ö
+#define SE_ADIA SQT         // Ä
+#define SE_QUOT NON_US_HASH // '
+#define SE_LABK NON_US_BSLH // <
+#define SE_MINS FSLH        // -
+#define SE_HALF LS(SE_SECT) // ½
+#define SE_EXLM LS(N1)      // !
+#define SE_DQUO LS(N2)      // "
+#define SE_HASH LS(N3)      // #
+#define SE_CURR LS(N4)      // ¤
+#define SE_PERC LS(N5)      // %
+#define SE_AMPR LS(N6)      // &
+#define SE_SLSH LS(N7)      // /
+#define SE_LPRN LS(N8)      // (
+#define SE_RPRN LS(N9)      // )
+#define SE_EQL  LS(N0)      // =
+#define SE_QUES LS(SE_PLUS) // ?
+#define SE_GRV  LS(SE_ACUT) // ` (dead)
+#define SE_CIRC LS(SE_DIAE) // ^ (dead)
+#define SE_ASTR LS(SE_QUOT) // *
+#define SE_RABK LS(SE_LABK) // >
+#define SE_SCLN LS(SE_COMM) // ;
+#define SE_COLN LS(SE_DOT)  // :
+#define SE_UNDS LS(SE_MINS) // _
+#define SE_AT   RA(N2)      // @
+#define SE_PND  RA(N3)      // £
+#define SE_DLR  RA(N4)      // $
+#define SE_EURO RA(N5)      // €
+#define SE_LCBR RA(N7)      // {
+#define SE_LBRC RA(N8)      // [
+#define SE_RBRC RA(N9)      // ]
+#define SE_RCBR RA(N0)      // }
+#define SE_BSLS RA(SE_PLUS) // (backslash)
+#define SE_TILD RA(SE_DIAE) // ~ (dead)
+#define SE_PIPE RA(SE_LABK) // |
+#define SE_MICR RA(SE_M)    // µ
+#define SE_LESS SE_LABK     // <
+#define SE_GRTR SE_RABK     // >
+
+// Swedish macOS specific keycodes 
+#define SE_ACUT_MAC SE_ACUT
+#define SE_QUOT_MAC SE_LABK
+#define SE_BSLS_MAC LS(SE_LCBR)
+#define SE_EURO_MAC  SE_CURR
+#define SE_GRV_MAC  SE_BSLS
+#define SE_GRTR_MAC SE_HALF
+#define SE_LCBR_MAC LS(SE_LBRC)
+#define SE_LESS_MAC SE_SECT
+#define SE_PIPE_MAC SE_LCBR
+#define SE_RCBR_MAC LS(SE_RBRC)
+#define SE_SECT_MAC SE_LABK
+
+&sl {
+    release-after-ms = <3000>;
+};
+
+&lt {
+    tapping-term-ms = <200>;
+    quick-tap-ms = <200>;
+    flavor = "balanced";
+};
+
+&mt {
+    tapping-term-ms = <200>;
+    quick-tap-ms = <200>;
+    flavor = "balanced";
+};
+
+&kscan0 {
+    debounce-press-ms = <30>;
+    debounce-release-ms = <30>;
+};
+
+/ {
+    behaviors {
+        hm: homerow_mods {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS";
+            #binding-cells = <2>;
+            tapping-term-ms = <500>;
+            quick-tap-ms = <200>;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+        };
+    };
+    combos {
+        compatible = "zmk,combos";
+        combo_aa {
+            timeout-ms = <60>;
+            key-positions = <7 8>;
+            bindings = <&kp SE_ARNG>;
+        };
+        combo_ae {
+            timeout-ms = <60>;
+            key-positions = <17 18>;
+            bindings = <&kp SE_ADIA>;
+        };
+     };
+    keymap {
+        compatible = "zmk,keymap";
+
+/* Colemak DHm
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |  q  |  w  |  f  |  p  |  b  |                   |  j  |  l  |  u  |  y  |  ö  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |sft-a|ctl-r|alt-s|gui-t|  g  |                   |  m  |gui-n|alt-e|ctl-i|sft-o|
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  z  |  x  |  c  |  d  |  v  |                   |  k  |  h  |  ,  |  .  |  -  |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |nu-tb|sh-sp|c-esc|       | del |na-en|sy-bs|
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        colemak_layer {
+            bindings = <
+    &kp Q     	 &kp W       &kp F      &kp P      &kp B                     &kp J     &kp L      &kp U      &kp Y       &kp SEMI
+    &mt LSHFT A  &hm LCTRL R &hm LALT S &hm LGUI T &kp G                     &kp M     &hm RGUI N &hm RALT E &hm RCTRL I &mt RSHFT O
+    &kp Z        &kp X       &kp C      &kp D      &kp V                     &kp K     &kp H      &kp COMMA  &kp DOT     &kp FSLH
+                        &lt NUMBER TAB  &mt LSHFT SPACE &mt LCTRL ESC    &kp DEL  &lt NAVI RET   &lt SYMBOL BSPC
+            >;
+        };
+
+
+/* MAC
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬───────┐     ┌─────┬─────┬────────┐
+                           |     |     |cmd-esc|     |     |     |sy_mc_bs|
+                           └─────┴─────┴───────┘     └─────┴─────┴────────┘
+*/
+        mac_layer {
+            bindings = <
+    &trans      &trans      &trans      &trans      &trans                      &trans      &trans     &trans     &trans     &trans 
+    &trans      &trans      &trans      &trans      &trans                      &trans      &trans     &trans     &trans     &trans 
+    &trans      &trans      &trans      &trans      &trans                      &trans      &trans     &trans     &trans     &trans 
+                                     &trans     &trans   &mt LGUI ESC   &trans   &trans     &lt SYMBOL_MAC BSPC    
+            >;
+        };
+
+/* QWERTY
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |  q  |  w  |  e  |  r  |  t  |                   |  y  |  u  |  i  |  o  |  p  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |sft-a|ctl-s|alt-d|gui-f|  g  |                   |  h  |gui-j|alt-k|ctl-l|sft-ö|
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  z  |  x  |  c  |  v  |  b  |                   |  n  |  m  |  ,  |  .  |  -  |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        qwerty_layer {
+            bindings = <
+    &kp Q     	 &kp W       &kp E      &kp R      &kp T                     &kp Y     &kp U      &kp I      &kp O       &kp P
+    &hm LSHFT A  &hm LCTRL S &hm LALT D &hm LGUI F &kp G                     &kp H     &hm RGUI J &hm RALT K &hm RCTRL L &hm RSHFT SEMI
+    &kp Z        &kp X       &kp C      &kp V      &kp B                     &kp N     &kp M      &kp COMMA  &kp DOT     &kp FSLH
+             	             &trans     &trans     &trans    	             &trans    &trans     &trans    
+            >;
+        };
+
+/* Symbols
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |  !  |  "  |  #  |  €  |  §  |                   |     |  /  |  \  |  |  |  =  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  '  |  {  |  [  |  (  |  %  |                   |  &  |  )  |  ]  |  }  |  +  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  ~  |  @  |  £  |  $  |  ´  |                   |  ¨  |  ?  |  <  |  >  |  *  |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        symbol_layer {
+            bindings = <
+    &kp SE_EXLM  &kp SE_DQUO  &kp SE_HASH  &kp SE_EURO  &kp SE_SECT                  &none        &kp SE_SLSH  &kp SE_BSLS  &kp SE_PIPE  &kp SE_EQL
+    &kp SE_QUOT  &kp SE_LCBR  &kp SE_LBRC  &kp SE_LPRN  &kp SE_PERC                  &kp SE_AMPR  &kp SE_RPRN  &kp SE_RBRC  &kp SE_RCBR  &kp SE_PLUS
+    &kp SE_TILD  &kp SE_AT    &kp SE_PND   &kp SE_DLR   &kp SE_ACUT                  &kp SE_DIAE  &kp SE_QUES  &kp SE_LESS  &kp SE_GRTR  &kp SE_ASTR
+                                     &trans     &trans   &trans   &trans   &trans     &trans    
+            >;
+        };
+
+/* Symbols for Mac
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |  !  |  "  |  #  |  €  |  §  |                   |     |  /  |  \  |  |  |  =  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  '  |  {  |  [  |  (  |  %  |                   |  &  |  )  |  ]  |  }  |  +  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |  ~  |  @  |  £  |  $  |  ´  |                   |  ¨  |  ?  |  <  |  >  |  *  |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        symbol_mac_layer {
+            bindings = <
+    &kp SE_EXLM  &kp SE_DQUO      &kp SE_HASH  &kp SE_EURO_MAC  &kp SE_SECT_MAC              &none        &kp SE_SLSH  &kp SE_BSLS_MAC  &kp SE_PIPE_MAC  &kp SE_EQL
+    &kp SE_QUOT  &kp SE_LCBR_MAC  &kp SE_LBRC  &kp SE_LPRN      &kp SE_PERC                  &kp SE_AMPR  &kp SE_RPRN  &kp SE_RBRC      &kp SE_RCBR_MAC  &kp SE_PLUS
+    &kp SE_TILD  &kp SE_AT        &kp SE_PND   &kp SE_DLR       &kp SE_ACUT                  &kp SE_DIAE  &kp SE_QUES  &kp SE_LESS_MAC  &kp SE_GRTR_MAC  &kp SE_ASTR
+                                                    &trans     &trans   &trans   &trans   &trans     &trans    
+            >;
+        };
+
+/* Numbers
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         | F1  | F2  | F3  | F4  | F5  |                   |  *  |  7  |  8  |  9  |  -  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         | F6  | F7  | F8  | F9  | F10 |                   |  /  |  4  |  5  |  6  |  +  |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         | F11 | F12 |     |     |     |                   |  =  |  1  |  2  |  3  |Enter|
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |  0  |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        number_layer {
+            bindings = <
+    &kp F1  &kp F2    &kp F3  &kp F4  &kp F5                          &kp SE_ASTR  &kp N7  &kp N8  &kp N9  &kp SE_MINS 
+    &kp F6  &kp F7    &kp F8  &kp F9  &kp F10                         &kp SE_BSLS  &kp N4  &kp N5  &kp N6  &kp SE_PLUS
+    &kp F11  &kp F12  &none   &none   &none                           &kp SE_EQL   &kp N1  &kp N2  &kp N3  &kp RET
+                                     &trans     &trans   &trans   &trans   &trans     &kp N0    
+            >;
+	};
+
+/* Navigation
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         | ADJ |NumLk|ScrLk|BriUp|VolUp|                   |Home |PgDn |PgUp | End |But3 |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |CapLk|PrScn| Ins |BriDo|VolDo|                   |Left |Down | Up  |Right|But2 |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |Pause|     |     |     |Mute |                   |MousL|MousD|MousU|MousR|But1 |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        navigation_layer {
+            bindings = <
+    &sl ADJUST       &kp KP_NUM  &kp SLCK  &kp C_BRI_UP  &kp C_VOL_UP		&kp HOME  &kp PG_DN  &kp PG_UP  &kp END    &none
+    &kp CAPS         &kp PSCRN   &kp INS   &kp C_BRI_DN  &kp C_VOL_DN           &kp LEFT  &kp DOWN   &kp UP     &kp RIGHT  &none
+    &kp PAUSE_BREAK  &none       &none     &none         &kp K_MUTE             &none     &none      &none      &none      &none
+                                     &trans     &trans   &trans   &trans   &trans     &trans    
+            >;
+        };
+
+/* Adjust
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         | BT0 | BT1 | BT2 | BT3 | BT4 |                   |     |     |     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         | USB | BLE |     |Reset|Qw/Co|                   |Wi/Mc|Reset|     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |     |BTClr|     |     |Bootl|                   |Bootl|     |     |     |     |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+        adjust_layer {
+            bindings = <
+    &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                   &none       &none     &none     &none     &none
+    &out OUT_USB &out OUT_BLE &none        &reset       &tog QWERTY                    &tog MAC    &reset    &none     &none     &none 
+    &none        &bt BT_CLR   &none        &none        &bootloader                    &bootloader &none     &none     &none     &none 
+                                               &none    &none       &none       &none     &none     &none    
+            >;
+        };
+
+/* Layer  illustration template
+         ┌─────┬─────┬─────┬─────┬─────┐                   ┌─────┬─────┬─────┬─────┬─────┐
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         ├─────┼─────┼─────┼─────┼─────┤                   ├─────┼─────┼─────┼─────┼─────┤
+         |     |     |     |     |     |                   |     |     |     |     |     |
+         └─────┴─────┴─────┴─────┴─────┘                   └─────┴─────┴─────┴─────┴─────┘
+                           ┌─────┬─────┬─────┐       ┌─────┬─────┬─────┐
+                           |     |     |     |       |     |     |     |
+                           └─────┴─────┴─────┘       └─────┴─────┴─────┘
+*/
+/*
+        template_layer {
+            bindings = <
+    &none      &none      &none      &none      &none                      &none      &none     &none     &none     &none 
+    &none      &none      &none      &none      &none                      &none      &none     &none     &none     &none 
+    &none      &none      &none      &none      &none                      &none      &none     &none     &none     &none 
+                                     &trans     &trans   &trans   &trans   &trans     &trans    
+            >;
+        };
+
+*/
+
+    };
+};

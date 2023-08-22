@@ -1,0 +1,7 @@
+// dactyl_air_right.overlay
+
+#include "dactyl_air.dtsi"
+
+&default_transform {
+    col-offset = <17>;
+};
