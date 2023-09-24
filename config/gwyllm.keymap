@@ -122,6 +122,7 @@
             flavor = "balanced";
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <KEYS_R THUMBS>;
+            hold-trigger-on-release;
         };
         hmr: homerow_mods_right {
             compatible = "zmk,behavior-hold-tap";
@@ -133,6 +134,7 @@
             flavor = "balanced";
             bindings = <&kp>, <&kp>;
             hold-trigger-key-positions = <KEYS_L THUMBS>;
+            hold-trigger-on-release;
         };
     };
     combos {
@@ -312,9 +314,9 @@
         adjust_layer {
             bindings = <
     &bt BT_SEL 0 &bt BT_SEL 1 &bt BT_SEL 2 &bt BT_SEL 3 &bt BT_SEL 4                   &kp CAPS    &kp KP_NUM &kp SLCK &none     &none
-    &out OUT_USB &out OUT_BLE &none        &reset       &tog QWERTY                    &tog MAC    &reset    &none     &none     &none 
-    &none        &bt BT_CLR   &none        &none        &bootloader                    &bootloader &none     &none     &none     &none 
-                                           &none        &none                          &none     &none
+    &out OUT_USB &out OUT_BLE &none        &sys_reset   &tog QWERTY                    &tog MAC    &sys_reset &none    &none     &none
+    &none        &bt BT_CLR   &none        &none        &bootloader                    &bootloader &none      &none    &none     &none
+                                           &none        &none                          &none       &none
             >;
         };
 
