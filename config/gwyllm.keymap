@@ -71,6 +71,11 @@
 #define SE_RCBR_MAC LS(SE_RBRC)
 #define SE_SECT_MAC SE_LABK
 
+// Left/Right keys
+#define KEYS_L 0 1 2 3 4 10 11 12 13 14 20 21 22 23 24
+#define KEYS_R 5 6 7 8 9 15 16 17 18 19 25 26 27 28 29
+#define THUMBS 30 31 32 33
+
 #define COMBO(NAME, BINDINGS, KEYPOS) \
   combo_##NAME { \
     timeout-ms = <25>; \
@@ -107,22 +112,39 @@
 
 / {
     behaviors {
-        hm: homerow_mods {
+        hml: homerow_mods_left {
             compatible = "zmk,behavior-hold-tap";
-            label = "HOMEROW_MODS";
+            label = "HOMEROW_MODS_LEFT";
             #binding-cells = <2>;
             tapping-term-ms = <300>;
             quick-tap-ms = <200>;
+            global-quick-tap;
             flavor = "balanced";
             bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <KEYS_R THUMBS>;
+        };
+        hmr: homerow_mods_right {
+            compatible = "zmk,behavior-hold-tap";
+            label = "HOMEROW_MODS_RIGHT";
+            #binding-cells = <2>;
+            tapping-term-ms = <300>;
+            quick-tap-ms = <200>;
+            global-quick-tap;
+            flavor = "balanced";
+            bindings = <&kp>, <&kp>;
+            hold-trigger-key-positions = <KEYS_L THUMBS>;
         };
     };
     combos {
         compatible = "zmk,combos";
         COMBO(aa, &kp SE_ARNG, 7 8)
+        COMBO(aa2, &kp SE_ARNG, 7 17)
         COMBO(ae, &kp SE_ADIA, 17 18)
+        COMBO(ae2, &kp SE_ADIA, 8 18)
         COMBO(esc, &kp ESC, 1 2)
+        COMBO(esc2, &kp ESC, 2 12)
         COMBO(del, &kp DEL, 27 28)
+        COMBO(del2, &kp DEL, 32 33)
      };
     keymap {
         compatible = "zmk,keymap";
@@ -142,7 +164,7 @@
         colemak_layer {
             bindings = <
     &kp Q     	 &kp W       &kp F      &kp P      &kp B                     &kp J     &kp L      &kp U      &kp Y       &kp SEMI
-    &mt LSHFT A  &hm LCTRL R &hm LALT S &hm LGUI T &kp G                     &kp M     &hm RGUI N &hm RALT E &hm RCTRL I &mt RSHFT O
+    &hml LSHFT A  &hml LCTRL R &hml LALT S &hml LGUI T &kp G                     &kp M     &hmr RGUI N &hmr RALT E &hmr RCTRL I &hmr RSHFT O
     &kp Z        &kp X       &kp C      &kp D      &kp V                     &kp K     &kp H      &kp COMMA  &kp DOT     &kp FSLH
                           &lt NUMBER TAB  &mt LSHFT SPACE                   &lt NAVI RET   &lt SYMBOL BSPC
             >;
@@ -185,7 +207,7 @@
         qwerty_layer {
             bindings = <
     &kp Q     	 &kp W       &kp E      &kp R      &kp T                     &kp Y     &kp U      &kp I      &kp O       &kp P
-    &hm LSHFT A  &hm LCTRL S &hm LALT D &hm LGUI F &kp G                     &kp H     &hm RGUI J &hm RALT K &hm RCTRL L &hm RSHFT SEMI
+    &hml LSHFT A  &hml LCTRL S &hml LALT D &hml LGUI F &kp G                     &kp H     &hmr RGUI J &hmr RALT K &hmr RCTRL L &hmr RSHFT SEMI
     &kp Z        &kp X       &kp C      &kp V      &kp B                     &kp N     &kp M      &kp COMMA  &kp DOT     &kp FSLH
              	                        &trans     &trans    	             &trans     &trans
             >;
